@@ -9,6 +9,10 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 end
 
 local set = vim.opt
+-- Tab settings
+set.tabstop = 4
+set.softtabstop = 4
+set.shiftwidth = 4
 
 require('packer').startup(function(use)
   -- Latex stuff
@@ -93,7 +97,6 @@ if is_bootstrap then
   print '=================================='
   return
 end
-
 -- Automatically source and re-compile packer whenever you save this init.lua
 local packer_group = vim.api.nvim_create_augroup('Packer', { clear = true })
 vim.api.nvim_create_autocmd('BufWritePost', {
