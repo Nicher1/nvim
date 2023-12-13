@@ -21,6 +21,15 @@ require('packer').startup(function(use)
   use 'debian-tex/latexmk'
   use 'sirver/ultisnips'
   use 'baskerville/sxhkd'
+  use {
+      "jackMort/ChatGPT.nvim",
+      config = function()
+          require("chatgpt").setup {
+              api_key = "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"
+          }
+      end
+}
+
   use 'polybar/polybar'
   -- Lazygit stuff
   use 'kdheepak/lazygit.nvim'
