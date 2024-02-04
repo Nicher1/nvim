@@ -47,6 +47,7 @@ vim.g.maplocalleader = ' '
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
+local home = vim.fn.expand("$HOME")
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system {
@@ -69,7 +70,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
   
-  -- Git related plugins
+  -- Git related pluginsvim.keymap.set('n', '<leader>gpt', '<cmd>ChatGPT<CR>', { desc = 'Open ChatGPT' })
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
   -- File navigation
@@ -77,9 +78,23 @@ require('lazy').setup({
   'kdheepak/lazygit.nvim',
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
+  {
+    "jackMort/chatgpt.nvim",
+      event = "VeryLazy",
+      config = function()
+        require("chatgpt").setup()
+      end,
+      dependencies = {
+        "MunifTanjim/nui.nvim",
+        "nvim-lua/plenary.nvim",
+        "folke/trouble.nvim",
+        "nvim-telescope/telescope.nvim",
+    }
+  },
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
+  -- chatgpt config
   {
     -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
@@ -682,3 +697,17 @@ vim.keymap.set('n', '<leader>lv', '<cmd>VimtexView<CR>', { desc = 'View PDF with
 -- vim: ts=2 sts=2 sw=2 et
 --
 --
+
+
+-- custom/plugins/chatgpt.lua
+
+
+require('chatgpt').setup({
+  -- Use gpg to decrypt the API key file
+  api_key_cmd = "gpg --quiet --batch --decrypt " .. home .. "/.secrets/openai_api_key.gpg",
+  -- Add other configuration options here
+})
+
+-- Keybindings for ChatGPT
+vim.keymap.set('n', '<leader>gpt', '<cmd>ChatGPT<CR>', { desc = 'Open ChatGPT' })
+vim.keymap.set('n', '<leader>gpa', '<cmd>ChatGPTActAs<CR>', { desc = 'Open Chat[G][P]T[a]ct as' })
