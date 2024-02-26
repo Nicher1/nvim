@@ -688,6 +688,8 @@ cmp.setup {
 vim.g.vimtex_view_method = 'general'
 vim.g.vimtex_view_general_viewer = 'SumatraPDF'
 vim.g.vimtex_quickfix_mode = 0
+vim.o.conceallevel = 1
+vim.g.tex_conceal = 'abdmg'
 
 -- Keybindings for vimtex
 vim.keymap.set('n', '<leader>ll', '<cmd>VimtexCompile<CR>', { desc = 'Compile LaTeX' })
