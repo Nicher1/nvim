@@ -69,13 +69,25 @@ vim.opt.rtp:prepend(lazypath)
 --    as they will be available in your neovim runtime.
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
-  
+ 
   -- Git related pluginsvim.keymap.set('n', '<leader>gpt', '<cmd>ChatGPT<CR>', { desc = 'Open ChatGPT' })
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
   -- File navigation
   'preservim/nerdtree',
   'kdheepak/lazygit.nvim',
+  -- Arduino compilation
+  {
+    'glebzlat/arduino-nvim',
+    config = function()
+      require('arduino-nvim').setup{
+      filetypes = {"arduino"},
+      default_fqbn = "arduino:avr:mega",
+      }
+
+    end,
+    ft = 'arduino'
+  },
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
   {
