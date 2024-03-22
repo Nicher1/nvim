@@ -44,6 +44,8 @@ P.S. You can delete this when you're done too. It's your config now :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+vim.o.tabstop = 4
+vim.o.shiftwidth=4
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -83,6 +85,8 @@ require('lazy').setup({
       require('arduino-nvim').setup{
       filetypes = {"arduino"},
       default_fqbn = "arduino:avr:mega",
+      clangd = "C:/Users/Nicher/AppData/Local/nvim-data/mason/packages/clangd/clangd_17.0.3/bin/clangd.exe",
+
       }
 
     end,
