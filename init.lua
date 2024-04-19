@@ -71,13 +71,12 @@ vim.opt.rtp:prepend(lazypath)
 --    as they will be available in your neovim runtime.
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
- 
-  -- Git related pluginsvim.keymap.set('n', '<leader>gpt', '<cmd>ChatGPT<CR>', { desc = 'Open ChatGPT' })
-  'tpope/vim-fugitive',
-  'tpope/vim-rhubarb',
+  -- Git related plugins
+    'tpope/vim-fugitive',
+    'tpope/vim-rhubarb',
   -- File navigation
-  'preservim/nerdtree',
-  'kdheepak/lazygit.nvim',
+    'preservim/nerdtree',
+    'kdheepak/lazygit.nvim',
   -- Arduino compilation
   {
     'glebzlat/arduino-nvim',
@@ -94,19 +93,7 @@ require('lazy').setup({
   },
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
-  {
-    "jackMort/chatgpt.nvim",
-      event = "VeryLazy",
-      config = function()
-        require("chatgpt").setup()
-      end,
-      dependencies = {
-        "MunifTanjim/nui.nvim",
-        "nvim-lua/plenary.nvim",
-        "folke/trouble.nvim",
-        "nvim-telescope/telescope.nvim",
-    }
-  },
+
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
@@ -717,15 +704,6 @@ vim.keymap.set('n', '<leader>lv', '<cmd>VimtexView<CR>', { desc = 'View PDF with
 --
 
 
--- custom/plugins/chatgpt.lua
 
 
-require('chatgpt').setup({
-  -- Use gpg to decrypt the API key file
-  api_key_cmd = "gpg --quiet --batch --decrypt " .. home .. "/.secrets/openai_api_key.gpg",
-  -- Add other configuration options here
-})
 
--- Keybindings for ChatGPT
-vim.keymap.set('n', '<leader>gpt', '<cmd>ChatGPT<CR>', { desc = 'Open ChatGPT' })
-vim.keymap.set('n', '<leader>gpa', '<cmd>ChatGPTActAs<CR>', { desc = 'Open Chat[G][P]T[a]ct as' })
