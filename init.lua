@@ -28,7 +28,6 @@ I have left several `:help X` comments throughout the init.lua
 You should run that command and read that help section for more information.
 
 In addition, I have some `NOTE:` items throughout the file.
--- TODO: kage 
 
 --These are for you, the reader to help understand what is happening. Feel free to delete
 them once you know what you're doing, but they should serve as a guide for when you
@@ -79,6 +78,8 @@ require('lazy').setup({
   -- File navigation
     'preservim/nerdtree',
     'kdheepak/lazygit.nvim',
+  -- Nerd fonts
+    'nvim-tree/nvim-web-devicons',
   -- Todo notes implementation
 {
   "folke/todo-comments.nvim",
@@ -100,10 +101,10 @@ require('lazy').setup({
         },
         TODO = { icon = " ", color = "info" },
         HACK = { icon = " ", color = "warning" },
-        WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
-        PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
-        NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
-        TEST = { icon = "⏲ ", color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
+        PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE", "PERF TOBIAS", "PERF NICHLAS"} },
+        WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX", "WARN TOBIAS", "WARN NICHLAS"} },
+        NOTE = { icon = " ", color = "hint", alt = { "INFO", "NOTE TOBIAS", "NOTE NICHLAS" } },
+        TEST = { icon = "⏲ ", color = "test", alt = { "TESTING", "PASSED", "FAILED", "TEST TOBIAS", "TEST NICHLAS"} },
       },
       gui_style = {
         fg = "NONE", -- The gui style to use for the fg highlight group.
