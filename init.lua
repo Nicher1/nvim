@@ -96,11 +96,11 @@ require('lazy').setup({
         FIX = {
           icon = " ", -- icon used for the sign, and in search results
           color = "error", -- can be a hex color, or a named color (see below)
-          alt = { "FIXME", "BUG", "FIXIT", "ISSUE" }, -- a set of other keywords that all map to this FIX keywords
+          alt = { "FIXME", "BUG", "FIXIT", "ISSUE", "TOBIAS FIX", "NICHLAS FIX" }, -- a set of other keywords that all map to this FIX keywords
           -- signs = false, -- configure signs for some keywords individually
         },
-        TODO = { icon = " ", color = "info" },
-        HACK = { icon = " ", color = "warning" },
+        TODO = { icon = " ", color = "info", alt = {"TOBIAS TODO", "NICHLAS TODO"} },
+        HACK = { icon = " ", color = "warning", alt = {"TOBIAS HACK", "NICHLAS HACK"} },
         PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE", "PERF TOBIAS", "PERF NICHLAS"} },
         WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX", "WARN TOBIAS", "WARN NICHLAS"} },
         NOTE = { icon = " ", color = "hint", alt = { "INFO", "NOTE TOBIAS", "NOTE NICHLAS" } },
