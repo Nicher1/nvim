@@ -46,7 +46,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 vim.o.tabstop = 4
-vim.o.shiftwidth=4
+vim.o.shiftwidth = 4
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -73,147 +73,147 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
   -- Git related plugins
-    'tpope/vim-fugitive',
-    'tpope/vim-rhubarb',
+  'tpope/vim-fugitive',
+  'tpope/vim-rhubarb',
   -- File navigation
-    'preservim/nerdtree',
-    'kdheepak/lazygit.nvim',
+  'preservim/nerdtree',
+  'kdheepak/lazygit.nvim',
   -- Nerd fonts
-    'nvim-tree/nvim-web-devicons',
+  'nvim-tree/nvim-web-devicons',
   -- Todo notes implementation
-{
-  "folke/todo-comments.nvim",
-  dependencies = { "nvim-lua/plenary.nvim" },
+  {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+      {
+        signs = true,    -- show icons in the signs column
+        sign_priority = 8, -- sign priority
+        -- keywords recognized as todo comments
+        keywords = {
+          FIX = {
+            icon = " ", -- icon used for the sign, and in search results
+            color = "error", -- can be a hex color, or a named color (see below)
+            alt = { "FIXME", "BUG", "FIXIT", "ISSUE", "TOBIAS FIX", "NICHLAS FIX" }, -- a set of other keywords that all map to this FIX keywords
+            -- signs = false, -- configure signs for some keywords individually
+          },
+          TODO = { icon = " ", color = "info", alt = { "TOBIAS TODO", "NICHLAS TODO" } },
+          HACK = { icon = " ", color = "warning", alt = { "TOBIAS HACK", "NICHLAS HACK" } },
+          PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE", "PERF TOBIAS", "PERF NICHLAS" } },
+          WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX", "WARN TOBIAS", "WARN NICHLAS" } },
+          NOTE = { icon = " ", color = "hint", alt = { "INFO", "NOTE TOBIAS", "NOTE NICHLAS" } },
+          TEST = { icon = "⏲ ", color = "test", alt = { "TESTING", "PASSED", "FAILED", "TEST TOBIAS", "TEST NICHLAS" } },
+        },
+        gui_style = {
+          fg = "NONE",       -- The gui style to use for the fg highlight group.
+          bg = "BOLD",       -- The gui style to use for the bg highlight group.
+        },
+        merge_keywords = true, -- when true, custom keywords will be merged with the defaults
+        -- highlighting of the line containing the todo comment
+        -- * before: highlights before the keyword (typically comment characters)
+        -- * keyword: highlights of the keyword
+        -- * after: highlights after the keyword (todo text)
+        highlight = {
+          multiline = true,              -- enable multine todo comments
+          multiline_pattern = "^.",      -- lua pattern to match the next multiline from the start of the matched keyword
+          multiline_context = 10,        -- extra lines that will be re-evaluated when changing a line
+          before = "",                   -- "fg" or "bg" or empty
+          keyword = "wide",              -- "fg", "bg", "wide", "wide_bg", "wide_fg" or empty. (wide and wide_bg is the same as bg, but will also highlight surrounding characters, wide_fg acts accordingly but with fg)
+          after = "fg",                  -- "fg" or "bg" or empty
+          pattern = [[.*<(KEYWORDS)\s*:]], -- pattern or table of patterns, used for highlighting (vim regex)
+          comments_only = true,          -- uses treesitter to match keywords in comments only
+          max_line_len = 400,            -- ignore lines longer than this
+          exclude = {},                  -- list of file types to exclude highlighting
+        },
+        -- list of named colors where we try to extract the guifg from the
+        -- list of highlight groups or use the hex color if hl not found as a fallback
+        colors = {
+          error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
+          warning = { "DiagnosticWarn", "WarningMsg", "#FBBF24" },
+          info = { "DiagnosticInfo", "#2563EB" },
+          hint = { "DiagnosticHint", "#10B981" },
+          default = { "Identifier", "#7C3AED" },
+          test = { "Identifier", "#FF00FF" }
+        },
+        search = {
+          command = "rg",
+          args = {
+            "--color=never",
+            "--no-heading",
+            "--with-filename",
+            "--line-number",
+            "--column",
+          },
+          -- regex that will be used to match keywords.
+          -- don't replace the (KEYWORDS) placeholder
+          pattern = [[\b(KEYWORDS):]], -- ripgrep regex
+          -- pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
+        },
+      }
+    }
+  },
+  "folke/trouble.nvim",
+  dependencies = { "nvim-tree/nvim-web-devicons" },
   opts = {
     -- your configuration comes here
     -- or leave it empty to use the default settings
     -- refer to the configuration section below
     {
-      signs = true, -- show icons in the signs column
-      sign_priority = 8, -- sign priority
-      -- keywords recognized as todo comments
-      keywords = {
-        FIX = {
-          icon = " ", -- icon used for the sign, and in search results
-          color = "error", -- can be a hex color, or a named color (see below)
-          alt = { "FIXME", "BUG", "FIXIT", "ISSUE", "TOBIAS FIX", "NICHLAS FIX" }, -- a set of other keywords that all map to this FIX keywords
-          -- signs = false, -- configure signs for some keywords individually
-        },
-        TODO = { icon = " ", color = "info", alt = {"TOBIAS TODO", "NICHLAS TODO"} },
-        HACK = { icon = " ", color = "warning", alt = {"TOBIAS HACK", "NICHLAS HACK"} },
-        PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE", "PERF TOBIAS", "PERF NICHLAS"} },
-        WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX", "WARN TOBIAS", "WARN NICHLAS"} },
-        NOTE = { icon = " ", color = "hint", alt = { "INFO", "NOTE TOBIAS", "NOTE NICHLAS" } },
-        TEST = { icon = "⏲ ", color = "test", alt = { "TESTING", "PASSED", "FAILED", "TEST TOBIAS", "TEST NICHLAS"} },
+      position = "bottom", -- position of the list can be: bottom, top, left, right
+      height = 10, -- height of the trouble list when position is top or bottom
+      width = 50, -- width of the list when position is left or right
+      icons = true, -- use devicons for filenames
+      mode = "workspace_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
+      severity = nil, -- nil (ALL) or vim.diagnostic.severity.ERROR | WARN | INFO | HINT
+      fold_open = "", -- icon used for open folds
+      fold_closed = "", -- icon used for closed folds
+      group = true, -- group results by file
+      padding = true, -- add an extra new line on top of the list
+      cycle_results = true, -- cycle item list when reaching beginning or end of list
+      action_keys = { -- key mappings for actions in the trouble list
+        -- map to {} to remove a mapping, for example:
+        -- close = {},
+        close = "q",                                                                           -- close the list
+        cancel = "<esc>",                                                                      -- cancel the preview and get back to your last window / buffer / cursor
+        refresh = "r",                                                                         -- manually refresh
+        jump = { "<cr>", "<tab>", "<2-leftmouse>" },                                           -- jump to the diagnostic or open / close folds
+        open_split = { "<c-x>" },                                                              -- open buffer in new split
+        open_vsplit = { "<c-v>" },                                                             -- open buffer in new vsplit
+        open_tab = { "<c-t>" },                                                                -- open buffer in new tab
+        jump_close = { "o" },                                                                  -- jump to the diagnostic and close the list
+        toggle_mode = "m",                                                                     -- toggle between "workspace" and "document" diagnostics mode
+        switch_severity = "s",                                                                 -- switch "diagnostics" severity filter level to HINT / INFO / WARN / ERROR
+        toggle_preview = "P",                                                                  -- toggle auto_preview
+        hover = "K",                                                                           -- opens a small popup with the full multiline message
+        preview = "p",                                                                         -- preview the diagnostic location
+        open_code_href = "c",                                                                  -- if present, open a URI with more information about the diagnostic error
+        close_folds = { "zM", "zm" },                                                          -- close all folds
+        open_folds = { "zR", "zr" },                                                           -- open all folds
+        toggle_fold = { "zA", "za" },                                                          -- toggle fold of current file
+        previous = "k",                                                                        -- previous item
+        next = "j",                                                                            -- next item
+        help = "?"                                                                             -- help menu
       },
-      gui_style = {
-        fg = "NONE", -- The gui style to use for the fg highlight group.
-        bg = "BOLD", -- The gui style to use for the bg highlight group.
+      multiline = true,                                                                        -- render multi-line messages
+      indent_lines = true,                                                                     -- add an indent guide below the fold icons
+      win_config = { border = "single" },                                                      -- window configuration for floating windows. See |nvim_open_win()|.
+      auto_open = false,                                                                       -- automatically open the list when you have diagnostics
+      auto_close = false,                                                                      -- automatically close the list when you have no diagnostics
+      auto_preview = true,                                                                     -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
+      auto_fold = false,                                                                       -- automatically fold a file trouble list at creation
+      auto_jump = { "lsp_definitions" },                                                       -- for the given modes, automatically jump if there is only a single result
+      include_declaration = { "lsp_references", "lsp_implementations", "lsp_definitions" },    -- for the given modes, include the declaration of the current symbol in the results
+      signs = {
+        -- icons / text used for a diagnostic
+        error = "",
+        warning = "",
+        hint = "",
+        information = "",
+        other = "",
       },
-      merge_keywords = true, -- when true, custom keywords will be merged with the defaults
-      -- highlighting of the line containing the todo comment
-      -- * before: highlights before the keyword (typically comment characters)
-      -- * keyword: highlights of the keyword
-      -- * after: highlights after the keyword (todo text)
-      highlight = {
-        multiline = true, -- enable multine todo comments
-        multiline_pattern = "^.", -- lua pattern to match the next multiline from the start of the matched keyword
-        multiline_context = 10, -- extra lines that will be re-evaluated when changing a line
-        before = "", -- "fg" or "bg" or empty
-        keyword = "wide", -- "fg", "bg", "wide", "wide_bg", "wide_fg" or empty. (wide and wide_bg is the same as bg, but will also highlight surrounding characters, wide_fg acts accordingly but with fg)
-        after = "fg", -- "fg" or "bg" or empty
-        pattern = [[.*<(KEYWORDS)\s*:]], -- pattern or table of patterns, used for highlighting (vim regex)
-        comments_only = true, -- uses treesitter to match keywords in comments only
-        max_line_len = 400, -- ignore lines longer than this
-        exclude = {}, -- list of file types to exclude highlighting
-      },
-      -- list of named colors where we try to extract the guifg from the
-      -- list of highlight groups or use the hex color if hl not found as a fallback
-      colors = {
-        error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
-        warning = { "DiagnosticWarn", "WarningMsg", "#FBBF24" },
-        info = { "DiagnosticInfo", "#2563EB" },
-        hint = { "DiagnosticHint", "#10B981" },
-        default = { "Identifier", "#7C3AED" },
-        test = { "Identifier", "#FF00FF" }
-      },
-      search = {
-        command = "rg",
-        args = {
-          "--color=never",
-          "--no-heading",
-          "--with-filename",
-          "--line-number",
-          "--column",
-        },
-        -- regex that will be used to match keywords.
-        -- don't replace the (KEYWORDS) placeholder
-        pattern = [[\b(KEYWORDS):]], -- ripgrep regex
-        -- pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
-      },
-    }
-  }
-},
-     "folke/trouble.nvim",
-     dependencies = { "nvim-tree/nvim-web-devicons" },
-     opts = {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-        {
-        position = "bottom", -- position of the list can be: bottom, top, left, right
-        height = 10, -- height of the trouble list when position is top or bottom
-        width = 50, -- width of the list when position is left or right
-        icons = true, -- use devicons for filenames
-        mode = "workspace_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
-        severity = nil, -- nil (ALL) or vim.diagnostic.severity.ERROR | WARN | INFO | HINT
-        fold_open = "", -- icon used for open folds
-        fold_closed = "", -- icon used for closed folds
-        group = true, -- group results by file
-        padding = true, -- add an extra new line on top of the list
-        cycle_results = true, -- cycle item list when reaching beginning or end of list
-        action_keys = { -- key mappings for actions in the trouble list
-            -- map to {} to remove a mapping, for example:
-            -- close = {},
-            close = "q", -- close the list
-            cancel = "<esc>", -- cancel the preview and get back to your last window / buffer / cursor
-            refresh = "r", -- manually refresh
-            jump = { "<cr>", "<tab>", "<2-leftmouse>" }, -- jump to the diagnostic or open / close folds
-            open_split = { "<c-x>" }, -- open buffer in new split
-            open_vsplit = { "<c-v>" }, -- open buffer in new vsplit
-            open_tab = { "<c-t>" }, -- open buffer in new tab
-            jump_close = {"o"}, -- jump to the diagnostic and close the list
-            toggle_mode = "m", -- toggle between "workspace" and "document" diagnostics mode
-            switch_severity = "s", -- switch "diagnostics" severity filter level to HINT / INFO / WARN / ERROR
-            toggle_preview = "P", -- toggle auto_preview
-            hover = "K", -- opens a small popup with the full multiline message
-            preview = "p", -- preview the diagnostic location
-            open_code_href = "c", -- if present, open a URI with more information about the diagnostic error
-            close_folds = {"zM", "zm"}, -- close all folds
-            open_folds = {"zR", "zr"}, -- open all folds
-            toggle_fold = {"zA", "za"}, -- toggle fold of current file
-            previous = "k", -- previous item
-            next = "j", -- next item
-            help = "?" -- help menu
-        },
-        multiline = true, -- render multi-line messages
-        indent_lines = true, -- add an indent guide below the fold icons
-        win_config = { border = "single" }, -- window configuration for floating windows. See |nvim_open_win()|.
-        auto_open = false, -- automatically open the list when you have diagnostics
-        auto_close = false, -- automatically close the list when you have no diagnostics
-        auto_preview = true, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
-        auto_fold = false, -- automatically fold a file trouble list at creation
-        auto_jump = {"lsp_definitions"}, -- for the given modes, automatically jump if there is only a single result
-        include_declaration = { "lsp_references", "lsp_implementations", "lsp_definitions"  }, -- for the given modes, include the declaration of the current symbol in the results
-        signs = {
-          -- icons / text used for a diagnostic
-          error = "",
-          warning = "",
-          hint = "",
-          information = "",
-          other = "",
-        },
-        use_diagnostic_signs = false -- enabling this will use the signs defined in your lsp client
+      use_diagnostic_signs = false   -- enabling this will use the signs defined in your lsp client
     }
   },
 
@@ -221,13 +221,12 @@ require('lazy').setup({
   {
     'glebzlat/arduino-nvim',
     config = function()
-      require('arduino-nvim').setup{
-      filetypes = {"arduino"},
-      default_fqbn = "arduino:avr:mega",
-      clangd = "C:/Users/Nicher/AppData/Local/nvim-data/mason/packages/clangd/clangd_17.0.3/bin/clangd.exe",
+      require('arduino-nvim').setup {
+        filetypes = { "arduino" },
+        default_fqbn = "arduino:avr:mega",
+        clangd = "C:/Users/Nicher/AppData/Local/nvim-data/mason/packages/clangd/clangd_17.0.3/bin/clangd.exe",
 
       }
-
     end,
     ft = 'arduino'
   },
@@ -248,7 +247,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -276,7 +275,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',  opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -329,7 +328,7 @@ require('lazy').setup({
         end, { desc = 'reset git hunk' })
         -- normal mode
 
-      local trouble = require("trouble").toggle
+        local trouble = require("trouble").toggle
         map('n', '<leader>xx', function() trouble() end, { desc = 'Toggle Trouble' })
         map('n', '<leader>xw', function() trouble("workspace_diagnostics") end, { desc = 'Toggle Workspace Diagnostics' })
         map('n', '<leader>xd', function() trouble("document_diagnostics") end, { desc = 'Toggle Document Diagnostics' })
@@ -742,7 +741,8 @@ require('mason-lspconfig').setup()
 --  If you want to override the default filetypes that your language server will attach to you can
 --  define the property 'filetypes' to the map in question.
 local servers = {
-  clangd = { filetypes = 'python'},
+  clangd = {},
+  jedi_language_server = {},
   -- gopls = {},
   -- pyright = {},
   -- rust_analyzer = {},
@@ -754,7 +754,7 @@ local servers = {
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
       -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-      -- diagnostics = { disable = { 'missing-fields' } },
+      diagnostics = { disable = { 'missing-fields' } },
     },
   },
 }
@@ -841,6 +841,18 @@ vim.g.vimtex_view_general_viewer = 'SumatraPDF'
 vim.g.vimtex_quickfix_mode = 0
 vim.o.conceallevel = 1
 vim.g.tex_conceal = 'abdmg'
+
+-- Add the shell-escape option
+vim.g.vimtex_compiler_latexmk = {
+  build_dir = '',
+  options = {
+    '-shell-escape',
+    '-verbose',
+    '-file-line-error',
+    '-synctex=1',
+    '-interaction=nonstopmode',
+  },
+}
 
 -- Keybindings for vimtex
 vim.keymap.set('n', '<leader>ll', '<cmd>VimtexCompile<CR>', { desc = 'Compile LaTeX' })
