@@ -217,22 +217,8 @@ require('lazy').setup({
     }
   },
 
-  -- Arduino compilation
-  {
-    'glebzlat/arduino-nvim',
-    config = function()
-      require('arduino-nvim').setup {
-        filetypes = { "arduino" },
-        default_fqbn = "arduino:avr:mega",
-        clangd = "C:/Users/Nicher/AppData/Local/nvim-data/mason/packages/clangd/clangd_17.0.3/bin/clangd.exe",
-
-      }
-    end,
-    ft = 'arduino'
-  },
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
-
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
@@ -252,6 +238,22 @@ require('lazy').setup({
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
     },
+  },
+  -- Arduino compile setup 
+  {
+    'glebzlat/arduino-nvim',
+    config = function()
+      require('arduino-nvim').setup {
+        filetypes = { "arduino" },
+        default_fqbn = "arduino:avr:mega",
+        clangd = home .. "\\AppData\\Local\\nvim-data\\mason\\packages\\clangd\\clangd_18.1.3\\bin\\clangd.exe",
+        arduino = home .. "\\AppData\\Local\\Arduino15\\arduino-cli.exe",  -- Path to your arduino-cli executable
+        extra_args = {
+          "-cli-config", home .. "\\AppData\\Local\\Arduino15\\arduino-cli.yaml"
+        }
+      }
+    end,
+    ft = 'arduino'
   },
   {
     -- LaTeX support with vimtex
@@ -743,6 +745,16 @@ require('mason-lspconfig').setup()
 local servers = {
   clangd = {},
   jedi_language_server = {},
+  arduino_language_server = {
+    filetypes = { 'arduino' },
+    cmd = {
+      home .. "\\AppData\\Local\\nvim-data\\mason\\packages\\arduino-language-server\\arduino-language-server.exe",
+      "-clangd", home .. "\\AppData\\Local\\nvim-data\\mason\\packages\\clangd\\clangd_18.1.3\\bin\\clangd.exe",
+      "-cli", home .. "\\AppData\\Local\\Arduino15\\arduino-cli.exe",
+      "-cli-config", home .. "\\AppData\\Local\\Arduino15\\arduino-cli.yaml",
+      "-fqbn", "arduino:avr:mega"
+    },
+  },
   -- gopls = {},
   -- pyright = {},
   -- rust_analyzer = {},
@@ -780,6 +792,7 @@ mason_lspconfig.setup_handlers {
       on_attach = on_attach,
       settings = servers[server_name],
       filetypes = (servers[server_name] or {}).filetypes,
+      cmd = (servers[server_name] or {}).cmd,
     }
   end,
 }
