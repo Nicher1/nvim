@@ -75,6 +75,15 @@ require('lazy').setup({
   -- Git related plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
+  -- Debugging
+  {
+  'rcarriga/nvim-dap-ui',
+  dependencies = {
+    'mfussenegger/nvim-dap',
+    'nvim-neotest/nvim-nio'
+    }
+  },
+  'mfussenegger/nvim-dap-python',
   -- File navigation
   'preservim/nerdtree',
   'kdheepak/lazygit.nvim',
@@ -330,13 +339,6 @@ require('lazy').setup({
         end, { desc = 'reset git hunk' })
         -- normal mode
 
-        local trouble = require("trouble").toggle
-        map('n', '<leader>xx', function() trouble() end, { desc = 'Toggle Trouble' })
-        map('n', '<leader>xw', function() trouble("workspace_diagnostics") end, { desc = 'Toggle Workspace Diagnostics' })
-        map('n', '<leader>xd', function() trouble("document_diagnostics") end, { desc = 'Toggle Document Diagnostics' })
-        map('n', '<leader>xq', function() trouble("quickfix") end, { desc = 'Toggle Quickfix' })
-        map('n', '<leader>xl', function() trouble("loclist") end, { desc = 'Toggle Location List' })
-        map('n', 'gR', function() trouble("lsp_references") end, { desc = 'Toggle LSP References' })
         map('n', '<leader>hs', gs.stage_hunk, { desc = 'git stage hunk' })
         map('n', '<leader>hr', gs.reset_hunk, { desc = 'git reset hunk' })
         map('n', '<leader>hS', gs.stage_buffer, { desc = 'git Stage buffer' })
@@ -357,6 +359,14 @@ require('lazy').setup({
 
         -- Text object
         map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = 'select git hunk' })
+        -- Trouble mappings
+        local trouble = require("trouble").toggle
+        map('n', '<leader>xx', function() trouble() end, { desc = 'Toggle Trouble' })
+        map('n', '<leader>xw', function() trouble("workspace_diagnostics") end, { desc = 'Toggle Workspace Diagnostics' })
+        map('n', '<leader>xd', function() trouble("document_diagnostics") end, { desc = 'Toggle Document Diagnostics' })
+        map('n', '<leader>xq', function() trouble("quickfix") end, { desc = 'Toggle Quickfix' })
+        map('n', '<leader>xl', function() trouble("loclist") end, { desc = 'Toggle Location List' })
+        map('n', 'gR', function() trouble("lsp_references") end, { desc = 'Toggle LSP References' })
       end,
     },
   },
@@ -866,6 +876,50 @@ vim.g.vimtex_compiler_latexmk = {
     '-interaction=nonstopmode',
   },
 }
+-- Debugging configuration
+local dap = require('dap')
+local dapui = require('dapui')
+
+-- C/C++ Debugging
+dap.adapters.cppdbg = {
+  id = 'cppdbg',
+  type = 'executable',
+  command = "C:\\tools\\OpenDebugAD7\\OpenDebugAD7.exe", -- Path to OpenDebugAD7.exe
+}
+dap.configurations.cpp = {
+  {
+    name = "Launch",
+    type = "cppdbg",
+    request = "launch",
+    program = function()
+      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '\\', 'file')
+    end,
+    cwd = '${workspaceFolder}',
+    stopAtEntry = false,
+    setupCommands = {
+      {
+        description = 'Enable pretty-printing for gdb',
+        text = '-enable-pretty-printing',
+        ignoreFailures = false
+      },
+    },
+  },
+}
+
+-- Python Debugging
+require('dap-python').setup('py') -- Path to your Python executable
+
+-- DAP UI setup
+dapui.setup()
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
+end
 
 -- Keybindings for vimtex
 vim.keymap.set('n', '<leader>ll', '<cmd>VimtexCompile<CR>', { desc = 'Compile LaTeX' })
